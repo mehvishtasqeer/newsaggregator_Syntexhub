@@ -34,7 +34,24 @@ def get_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def initialize_database():
+    conn = get_connection()
+    try:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS news (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                source TEXT,
+                title TEXT UNIQUE,
+                published_at TEXT,
+                url TEXT
+            )
+        """)
+        conn.commit()
+    finally:
+        conn.close()
 
+
+initialize_database()
 # Create news table if it does not exist
 def create_table():
     conn = get_connection()
